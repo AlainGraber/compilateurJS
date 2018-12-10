@@ -2,6 +2,10 @@ import ply.lex as lex
 
 reserved_words = (
     'var',
+	'console_log',
+	'function',
+	'while',
+	'return'
 )
 
 tokens = (
@@ -11,11 +15,11 @@ tokens = (
              'IDENTIFIER',
          ) + tuple(map(lambda s: s.upper(), reserved_words))
 
-literals = ';='
+literals = '();={},><'
 
 
 def t_ADD_OP(t):
-    r'[+-]'
+    r'[+-][+-]?'
     return t
 
 

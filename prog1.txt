@@ -1,0 +1,5 @@
+toto = 2;
+function myFunction(t){
+	return toto + t;
+}
+console_log(myFunction(toto));
