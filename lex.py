@@ -62,7 +62,7 @@ def t_error(t):
     t.lexer.skip(1)
 
 
-lex.lex()
+lex.lex(debug=False)
 
 if __name__ == "__main__":
     import sys
