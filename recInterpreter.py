@@ -3,6 +3,8 @@ from AST import addToClass
 from functools import reduce
 
 operations = {
+    '++': lambda x: x + 1,
+    '--': lambda x: x - 1,
     '+': lambda x, y: x + y,
     '-': lambda x, y: x - y,
     '*': lambda x, y: x * y,
@@ -38,6 +40,12 @@ def execute(self):
 
     return reduce(operations[self.op], args)
 
+@addToClass(AST.UnaryNode)
+def execute(self):
+    print(vars)
+    print(self.tok.tok)
+    vars[self.tok.tok] = operations[self.children](vars[self.tok.tok])
+
 
 @addToClass(AST.AssignNode)
 def execute(self):
@@ -61,6 +69,4 @@ if __name__ == '__main__':
 
     prog = open(sys.argv[1]).read()
     ast = parse(prog)
-
-    print()
     ast.execute()

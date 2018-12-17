@@ -123,6 +123,17 @@ class OpNode(Node):
     def __repr__(self):
         return "%s (%s)" % (self.op, self.nbargs)
 
+class UnaryNode(Node):
+    type = '++'
+
+    def __init__(self, tok, op):
+        Node.__init__(self, op)
+        self.tok = tok
+        try:
+            self.nbargs = len(op)
+        except AttributeError:
+            self.nbargs = 1
+
 
 class AssignNode(Node):
     type = '='

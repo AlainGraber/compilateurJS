@@ -9,6 +9,7 @@ reserved_words = (
 )
 
 tokens = (
+             'INC_OP',
              'NUMBER',
              'ADD_OP',
              'MUL_OP',
@@ -17,9 +18,12 @@ tokens = (
 
 literals = '();={},><'
 
+def t_INC_OP(t):
+    r'\+\+|--'
+    return t
 
 def t_ADD_OP(t):
-    r'[+-][+-]?'
+    r'[+-]'
     return t
 
 

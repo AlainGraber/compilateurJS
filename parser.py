@@ -37,6 +37,9 @@ def p_expression_op(p):
             | expression MUL_OP expression'''
     p[0] = AST.OpNode(p[2], [p[1], p[3]])
 
+def p_unary_op(p):
+    '''assignation : IDENTIFIER INC_OP'''
+    p[0] = AST.UnaryNode(AST.TokenNode(p[1]), p[2])
 
 def p_expression_num_or_var(p):
     '''expression : NUMBER

@@ -1,2 +1,5 @@
-var a = 10 + 5;
+var a = 10;
+a++;
+console_log(a);
+a--;
 console_log(a)
