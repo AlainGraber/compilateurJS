@@ -1,5 +1,6 @@
 toto = 2;
 function myFunction(t){
+	toto --;
 	return toto + t;
 }
-console_log(myFunction(toto));
+console_log(myFunction(4));
