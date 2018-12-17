@@ -64,7 +64,7 @@ def execute(self):
 
 
 if __name__ == '__main__':
-    from parser import parse
+    from js_parser import parse
     import sys
 
     prog = open(sys.argv[1]).read()

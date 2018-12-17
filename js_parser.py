@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 
-from lex import tokens
+from js_lex import tokens
 import AST
 
 vars = {}
