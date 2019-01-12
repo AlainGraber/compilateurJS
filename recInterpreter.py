@@ -11,6 +11,15 @@ operations = {
     '/': lambda x, y: x / y,
 }
 
+comparisons = {
+    '==': lambda a, b: a == b,
+    '!=': lambda a, b: a != b,
+    '<': lambda a, b: a < b,
+    '>': lambda a, b: a > b,
+    '<=': lambda a, b: a <= b,
+    '>=': lambda a, b: a >= b,
+}
+
 vars = {}
 
 
@@ -42,8 +51,6 @@ def execute(self):
 
 @addToClass(AST.UnaryNode)
 def execute(self):
-    print(vars)
-    print(self.tok.tok)
     vars[self.tok.tok] = operations[self.children](vars[self.tok.tok])
 
 
@@ -61,6 +68,22 @@ def execute(self):
 def execute(self):
     while self.children[0].execute():
         self.children[1].execute()
+
+
+@addToClass(AST.BoolNode)
+def execute(self):
+    if isinstance(self.bool, str):
+        if self.bool == 'true':
+            self.bool = True
+        elif self.bool == 'false':
+            self.bool = False
+
+    return self.bool
+
+@addToClass(AST.CompareNode)
+def execute(self):
+    comparison = comparisons[self.comparison](self.children[0].execute(), self.children[1].execute())
+    return AST.BoolNode(comparison).execute()
 
 
 if __name__ == '__main__':

@@ -135,6 +135,22 @@ class UnaryNode(Node):
             self.nbargs = 1
 
 
+class BoolNode(Node):
+    type = 'bool'
+
+    def __init__(self, bool):
+        Node.__init__(self)
+        self.bool = bool
+
+
+class CompareNode(Node):
+    type = 'comparison'
+
+    def __init__(self, comparison, children):
+        Node.__init__(self)
+        self.comparison = comparison
+        self.children = children
+
 class AssignNode(Node):
     type = '='
 

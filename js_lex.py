@@ -2,10 +2,12 @@ import ply.lex as lex
 
 reserved_words = (
     'var',
-	'console_log',
-	'function',
-	'while',
-	'return'
+    'console_log',
+    'function',
+    'while',
+    'return',
+    'true',
+    'false',
 )
 
 tokens = (
@@ -14,6 +16,7 @@ tokens = (
              'ADD_OP',
              'MUL_OP',
              'IDENTIFIER',
+             'COMPARISON'
          ) + tuple(map(lambda s: s.upper(), reserved_words))
 
 literals = '();={},><'
@@ -50,6 +53,10 @@ def t_IDENTIFIER(t):
     # Removes only the last word if var is present
     t.value = t.value.split(' ')[-1]
 
+    return t
+
+def t_COMPARISON(t):
+    r'[=!]=|[<>]=?'
     return t
 
 

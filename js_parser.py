@@ -47,6 +47,17 @@ def p_expression_num_or_var(p):
     p[0] = AST.TokenNode(p[1])
 
 
+def p_bool(p):
+    '''expression : TRUE
+        | FALSE'''
+    p[0] = AST.BoolNode(p[1])
+
+
+def p_compare(p):
+    '''expression : expression COMPARISON expression'''
+    p[0] = AST.CompareNode(p[2], [p[1], p[3]])
+
+
 def p_expression_paren(p):
     '''expression : '(' expression ')' '''
     p[0] = p[2]
@@ -73,6 +84,7 @@ def p_error(p):
 precedence = (
     ('left', 'ADD_OP'),
     ('left', 'MUL_OP'),
+    ('left', 'COMPARISON'),
     ('right', 'UMINUS'),
 )
 
