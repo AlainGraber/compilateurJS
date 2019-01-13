@@ -11,7 +11,6 @@ reserved_words = (
 )
 
 tokens = (
-             'COMMENT',
              'INC_OP',
              'NUMBER',
              'ADD_OP',
