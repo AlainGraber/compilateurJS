@@ -9,6 +9,8 @@ function foo(a, b) {
     console_log(a);
     console_log(b);
     console_log(c);
+
+    return c;
 }
 
 function bar() {
@@ -25,7 +27,7 @@ while(i <= 10) {
     i++;
 }
 
-foo(i, 200);
+a = foo(i, 200);
 bar();
 console_log(a);
 console_log(c);

@@ -28,7 +28,10 @@ functions_args = {}
 @addToClass(AST.ProgramNode)
 def execute(self):
     for c in self.children:
-        c.execute()
+        if isinstance(c, AST.FunctionReturnNode):
+            return c.execute()
+        else:
+            c.execute()
 
 
 @addToClass(AST.TokenNode)
@@ -111,13 +114,23 @@ def execute(self):
         functions_args[self.identifier] = self.args
 
 
+@addToClass(AST.FunctionReturnNode)
+def execute(self):
+    if self.children:
+        return self.children[0].execute()
+
+    return None
+
+
 @addToClass(AST.FunctionCallNode)
 def execute(self):
     if isinstance(self.children, str):
         try:
             tmp_variables = copy_tmp_variables(self.children, self.args)
-            function_definitions[self.children].execute()
+            result = function_definitions[self.children].execute()
             clear_tmp_variables(self.children, tmp_variables)
+
+            return result
         except KeyError:
             print('*** Error: function %s undefined!' % self.children)
 

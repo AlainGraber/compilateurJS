@@ -27,9 +27,19 @@ def p_statement(p):
     ''' statement : assignation
         | expression
         | print
+        | return_statement
         | statement semi_colon
         | semi_colon '''
     p[0] = p[1]
+
+
+def p_function_return(p):
+    ''' return_statement : RETURN expression
+        | RETURN '''
+    if len(p) == 3:
+        p[0] = AST.FunctionReturnNode(p[2])
+    else:
+        p[0] = AST.FunctionReturnNode()
 
 
 def p_statement_print(p):

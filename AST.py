@@ -170,6 +170,10 @@ class FunctionDefinitionNode(Node):
         self.children = children
 
 
+class FunctionReturnNode(Node):
+    type = 'function return'
+
+
 class FunctionCallNode(Node):
     type = 'function call'
 
