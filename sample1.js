@@ -1,3 +1,5 @@
+// Example taken from project specifications
+
 function f(x) {
   return x + 0.1;
 }
