@@ -28,6 +28,7 @@ functions_args = {}
 @addToClass(AST.ProgramNode)
 def execute(self):
     for c in self.children:
+        # @todo Check if we're within a function
         if isinstance(c, AST.FunctionReturnNode):
             return c.execute()
         else:
@@ -54,13 +55,18 @@ def execute(self):
 
     return reduce(operations[self.op], args)
 
+
 @addToClass(AST.UnaryNode)
 def execute(self):
-    vars[self.tok.tok] = operations[self.children](vars[self.tok.tok])
+    vars[self.variable.tok] = operations[self.children](vars[self.variable.tok])
 
 
 @addToClass(AST.DeclareNode)
 def execute(self):
+    """
+    Almost the same than AssignNode execute method
+    except that a variable can be declared without any assignation
+    """
     identifier = self.children[0].tok
 
     if len(self.children) > 1:
@@ -95,6 +101,7 @@ def execute(self):
 
     return self.bool
 
+
 @addToClass(AST.CompareNode)
 def execute(self):
     comparison = comparisons[self.comparison](self.children[0].execute(), self.children[1].execute())
@@ -104,12 +111,14 @@ def execute(self):
 @addToClass(AST.FunctionArgumentsNode)
 def execute(self):
     for arg in self.args:
+        # Compute the values the function was called with (could be an expression)
         AST.TokenNode(arg).execute()
 
 
 @addToClass(AST.FunctionDefinitionNode)
 def execute(self):
     if isinstance(self.identifier, str):
+        # Registers the function definition and its arguments
         function_definitions[self.identifier] = self.children[0]
         functions_args[self.identifier] = self.args
 
@@ -134,12 +143,20 @@ def execute(self):
         except KeyError:
             print('*** Error: function %s undefined!' % self.children)
 
+
 @addToClass(AST.NoOpNode)
 def execute(self):
     pass
 
 
 def copy_tmp_variables(function_identifier, args):
+    """
+    This function and clear_tmp_variables function are designed to "simulate" JS global and local variables scopes.
+
+    :param function_identifier:
+    :param args:
+    :return:
+    """
     # Dict of dict to hold values of global and local scope
     tmp_variables = {
         'global': dict(),
@@ -147,23 +164,26 @@ def copy_tmp_variables(function_identifier, args):
     }
 
     # Make sure that there is no declaration in the function that could overwrite global variables
-    # and mark the local variables to delete them when the function returns
+    # and mark the local variables in order to delete them when the function returns
     for instructions in function_definitions[function_identifier].children:
         if isinstance(instructions, AST.DeclareNode):
             variable_name = instructions.children[0].tok
 
             if variable_name in vars:
-                # if the variable exists, let's save its current value to restore it when the function returns
+                # The global variable will be shadowed by the local variable
+                # let's save its current value to restore it when the function returns
                 tmp_variables['global'][variable_name] = vars[variable_name]
             else:
                 # if the variable doesn't currently exist, then it is a local variable
                 # let's mark it to delete it when the function returns
                 tmp_variables['local'][variable_name] = True
 
-    # Make sure that there is no argument name that could overwrite global variables
+    # Make sure that there no argument which were given to the function could overwrite global variables
     if functions_args[function_identifier].args:
         for arg in functions_args[function_identifier].args:
             try:
+                # The global variable will be shadowed by the argument
+                # let's save its current value to restore it when the function returns
                 tmp_variables['global'][arg] = vars[arg]
             except KeyError:
                 pass
@@ -176,7 +196,14 @@ def copy_tmp_variables(function_identifier, args):
 
 
 def clear_tmp_variables(function_identifier, tmp_variables):
-    # Deletes the function arguments
+    """
+    This function and copy_tmp_variables function are designed to "simulate" JS global and local variables scopes.
+
+    :param function_identifier:
+    :param args:
+    :return:
+    """
+    # Deletes the arguments which were given to the function
     if functions_args[function_identifier].args:
         for identifier in functions_args[function_identifier].args:
             del vars[identifier]

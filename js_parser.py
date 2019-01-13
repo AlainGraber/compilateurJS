@@ -1,9 +1,7 @@
 import ply.yacc as yacc
 
-from js_lex import tokens
 import AST
-
-vars = {}
+from js_lex import tokens
 
 
 def p_programme_statement(p):
@@ -55,15 +53,19 @@ def p_structure(p):
 def p_function_definition_arguments(p):
     ''' function_definition_arguments : IDENTIFIER
         | function_definition_arguments ',' IDENTIFIER
-        | ''' # No function argument
+        | '''
     if len(p) == 2:
+        # First iteration or only one argument
         p[0] = p[1]
         if type(p[0]) != AST.FunctionArgumentsNode:
             p[0] = AST.FunctionArgumentsNode([p[0]])
     elif len(p) == 4:
+        # Iterating through the list of arguments
         p[0] = p[1]
+        # Let's add the new argument to the FunctionArgumentNode
         p[1].args.append(p[3])
     else:
+        # No function argument
         p[0] = AST.FunctionArgumentsNode()
 
 
@@ -75,15 +77,19 @@ def p_function_definition(p):
 def p_function_call_arguments(p):
     ''' function_call_arguments : expression
         | function_call_arguments ',' expression
-        | ''' # No function argument
+        | '''
     if len(p) == 2:
+        # First iteration or only one argument
         p[0] = p[1]
         if type(p[0]) != AST.FunctionArgumentsNode:
             p[0] = AST.FunctionArgumentsNode([p[0]])
     elif len(p) == 4:
+        # Iterating through the list of arguments
         p[0] = p[1]
+        # Let's add the new argument to the FunctionArgumentNode
         p[1].args.append(p[3])
     else:
+        # No function argument
         p[0] = AST.FunctionArgumentsNode()
 
 
@@ -97,9 +103,11 @@ def p_expression_op(p):
             | expression MUL_OP expression'''
     p[0] = AST.OpNode(p[2], [p[1], p[3]])
 
+
 def p_unary_op(p):
     '''assignation : IDENTIFIER INC_OP'''
     p[0] = AST.UnaryNode(AST.TokenNode(p[1]), p[2])
+
 
 def p_expression_num_or_var(p):
     '''expression : NUMBER
@@ -151,7 +159,7 @@ def p_error(p):
 
 
 precedence = (
-    ('nonassoc', 'COMPARISON'), # Nonassociative operators
+    ('nonassoc', 'COMPARISON'),  # Nonassociative operators -> can't be chained : for instance a < b < c is forbidden
     ('left', 'ADD_OP'),
     ('left', 'MUL_OP'),
     ('right', 'UMINUS'),

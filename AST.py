@@ -126,9 +126,9 @@ class OpNode(Node):
 class UnaryNode(Node):
     type = '++'
 
-    def __init__(self, tok, op):
+    def __init__(self, variable, op):
         Node.__init__(self, op)
-        self.tok = tok
+        self.variable = variable
         try:
             self.nbargs = len(op)
         except AttributeError:

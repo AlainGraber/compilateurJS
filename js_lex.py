@@ -21,13 +21,16 @@ tokens = (
 
 literals = '();={},><'
 
+
 def t_COMMENT(t):
     r'//.*'
-    pass  # No return value. Token discarded
+    pass  # Discards the comment.
+
 
 def t_INC_OP(t):
     r'\+\+|--'
     return t
+
 
 def t_ADD_OP(t):
     r'[+-]'
@@ -58,6 +61,7 @@ def t_IDENTIFIER(t):
     t.value = t.value.split(' ')[-1]
 
     return t
+
 
 def t_COMPARISON(t):
     r'[=!]=|[<>]=?'
