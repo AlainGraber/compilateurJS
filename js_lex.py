@@ -11,15 +11,20 @@ reserved_words = (
 )
 
 tokens = (
+             'COMMENT',
              'INC_OP',
              'NUMBER',
              'ADD_OP',
              'MUL_OP',
              'IDENTIFIER',
-             'COMPARISON'
+             'COMPARISON',
          ) + tuple(map(lambda s: s.upper(), reserved_words))
 
 literals = '();={},><'
+
+def t_COMMENT(t):
+    r'//.*'
+    pass  # No return value. Token discarded
 
 def t_INC_OP(t):
     r'\+\+|--'
