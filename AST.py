@@ -183,6 +183,10 @@ class NoOpNode(Node):
     type = 'no op'
 
 
+class DeclareNode(Node):
+    type = 'var'
+
+
 class AssignNode(Node):
     type = '='
 

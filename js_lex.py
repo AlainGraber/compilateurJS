@@ -46,7 +46,7 @@ def t_NUMBER(t):
 
 
 def t_IDENTIFIER(t):
-    r'(?:var\s+)?[A-Za-z_]\w*'
+    r'[A-Za-z_]\w*'
     if t.value in reserved_words:
         t.type = t.value.upper()
 

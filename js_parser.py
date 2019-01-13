@@ -118,6 +118,15 @@ def p_minus(p):
     p[0] = AST.OpNode(p[1], [p[2]])
 
 
+def p_declare(p):
+    ''' assignation : VAR IDENTIFIER
+        | VAR IDENTIFIER '=' expression '''
+    if len(p) == 3:
+        p[0] = AST.DeclareNode([AST.TokenNode(p[2])])
+    else:
+        p[0] = AST.DeclareNode([AST.TokenNode(p[2]), p[4]])
+
+
 def p_assign(p):
     ''' assignation : IDENTIFIER '=' expression '''
     p[0] = AST.AssignNode([AST.TokenNode(p[1]), p[3]])

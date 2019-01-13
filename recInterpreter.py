@@ -56,6 +56,16 @@ def execute(self):
     vars[self.tok.tok] = operations[self.children](vars[self.tok.tok])
 
 
+@addToClass(AST.DeclareNode)
+def execute(self):
+    identifier = self.children[0].tok
+
+    if len(self.children) > 1:
+        vars[identifier] = self.children[1].execute()
+    else:
+        vars[identifier] = None
+
+
 @addToClass(AST.AssignNode)
 def execute(self):
     vars[self.children[0].tok] = self.children[1].execute()
@@ -123,10 +133,10 @@ def copy_tmp_variables(function_identifier, args):
         'local': dict(),
     }
 
-    # Make sure that there is no assignment in the function that could overwrite global variables
+    # Make sure that there is no declaration in the function that could overwrite global variables
     # and mark the local variables to delete them when the function returns
     for instructions in function_definitions[function_identifier].children:
-        if isinstance(instructions, AST.AssignNode):
+        if isinstance(instructions, AST.DeclareNode):
             variable_name = instructions.children[0].tok
 
             if variable_name in vars:
