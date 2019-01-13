@@ -123,6 +123,7 @@ class OpNode(Node):
     def __repr__(self):
         return "%s (%s)" % (self.op, self.nbargs)
 
+
 class UnaryNode(Node):
     type = '++'
 
