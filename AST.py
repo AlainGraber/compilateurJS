@@ -111,6 +111,13 @@ class TokenNode(Node):
         return repr(self.tok)
 
 
+class StringLiteralNode(Node):
+    type = 'string'
+
+    def __init__(self, children):
+        Node.__init__(self, children)
+
+
 class OpNode(Node):
     def __init__(self, op, children):
         Node.__init__(self, children)

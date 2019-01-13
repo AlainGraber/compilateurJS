@@ -17,6 +17,7 @@ tokens = (
              'MUL_OP',
              'IDENTIFIER',
              'COMPARISON',
+             'STRING_LITERAL'
          ) + tuple(map(lambda s: s.upper(), reserved_words))
 
 literals = '();={},><'
@@ -49,6 +50,11 @@ def t_NUMBER(t):
     except ValueError:
         print("Line %d: Problem while parsing %s!" % (t.lineno, t.value))
         t.value = 0
+    return t
+
+
+def t_STRING_LITERAL(t):
+    r"(?<!\\)'.*?(?<!\\)'"
     return t
 
 

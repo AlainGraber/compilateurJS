@@ -46,8 +46,15 @@ def execute(self):
     return self.tok
 
 
+@addToClass(AST.StringLiteralNode)
+def execute(self):
+    string = self.children[1:-1] # Remove quotes around the string literal
+    return string.encode('utf-8').decode('unicode_escape') # back-slash unescaping, taken from https://stackoverflow.com/questions/1885181/how-do-i-un-escape-a-backslash-escaped-string-in-python
+
+
 @addToClass(AST.OpNode)
 def execute(self):
+    # @todo If a StringLiteralNode is given, check that only '+' operator is used
     args = [c.execute() for c in self.children]
 
     if len(args) == 1:

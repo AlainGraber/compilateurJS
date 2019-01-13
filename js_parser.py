@@ -115,6 +115,11 @@ def p_expression_num_or_var(p):
     p[0] = AST.TokenNode(p[1])
 
 
+def p_string_literal(p):
+    '''expression : STRING_LITERAL'''
+    p[0] = AST.StringLiteralNode(p[1])
+
+
 def p_bool(p):
     '''expression : TRUE
         | FALSE'''
