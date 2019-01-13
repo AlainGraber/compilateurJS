@@ -7,24 +7,28 @@ vars = {}
 
 
 def p_programme_statement(p):
-    ''' programme : statement '''
+    ''' programme : statement
+        | structure'''
     p[0] = AST.ProgramNode(p[1])
 
 
 def p_programme_recursive(p):
-    ''' programme : statement ';' programme '''
-    p[0] = AST.ProgramNode([p[1]] + p[3].children)
+    ''' programme : statement programme
+        | structure programme '''
+    p[0] = AST.ProgramNode([p[1]] + p[2].children)
 
 
 def p_statement(p):
     ''' statement : assignation
-        | structure
-        | expression'''
+        | expression
+        | print
+        | statement ';'
+        | ';' '''
     p[0] = p[1]
 
 
 def p_statement_print(p):
-    ''' statement : CONSOLE_LOG expression '''
+    ''' print : CONSOLE_LOG expression '''
     p[0] = AST.PrintNode(p[2])
 
 
