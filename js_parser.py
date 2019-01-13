@@ -18,12 +18,17 @@ def p_programme_recursive(p):
     p[0] = AST.ProgramNode([p[1]] + p[2].children)
 
 
+def p_semi_colon(p):
+    ''' semi_colon : ';' '''
+    p[0] = AST.NoOpNode()
+
+
 def p_statement(p):
     ''' statement : assignation
         | expression
         | print
-        | statement ';'
-        | ';' '''
+        | statement semi_colon
+        | semi_colon '''
     p[0] = p[1]
 
 

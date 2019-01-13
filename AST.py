@@ -179,6 +179,10 @@ class FunctionCallNode(Node):
         self.args = args
 
 
+class NoOpNode(Node):
+    type = 'no op'
+
+
 class AssignNode(Node):
     type = '='
 

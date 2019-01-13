@@ -111,6 +111,10 @@ def execute(self):
         except KeyError:
             print('*** Error: function %s undefined!' % self.children)
 
+@addToClass(AST.NoOpNode)
+def execute(self):
+    pass
+
 
 def copy_tmp_variables(function_identifier, args):
     # Dict of dict to hold values of global and local scope
