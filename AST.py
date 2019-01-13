@@ -151,6 +151,34 @@ class CompareNode(Node):
         self.comparison = comparison
         self.children = children
 
+
+class FunctionArgumentsNode(Node):
+    type = 'function arguments'
+
+    def __init__(self, args=None):
+        Node.__init__(self, args)
+        self.args = args
+
+
+class FunctionDefinitionNode(Node):
+    type = 'function definition'
+
+    def __init__(self, identifier, args, children):
+        Node.__init__(self)
+        self.identifier = identifier
+        self.args = args
+        self.children = children
+
+
+class FunctionCallNode(Node):
+    type = 'function call'
+
+    def __init__(self, children, args=None):
+        Node.__init__(self, children)
+        self.children = children
+        self.args = args
+
+
 class AssignNode(Node):
     type = '='
 

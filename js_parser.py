@@ -18,7 +18,8 @@ def p_programme_recursive(p):
 
 def p_statement(p):
     ''' statement : assignation
-        | structure '''
+        | structure
+        | expression'''
     p[0] = p[1]
 
 
@@ -30,6 +31,46 @@ def p_statement_print(p):
 def p_structure(p):
     ''' structure : WHILE expression '{' programme '}' '''
     p[0] = AST.WhileNode([p[2], p[4]])
+
+
+def p_function_definition_arguments(p):
+    ''' function_definition_arguments : IDENTIFIER
+        | function_definition_arguments ',' IDENTIFIER
+        | ''' # No function argument
+    if len(p) == 2:
+        p[0] = p[1]
+        if type(p[0]) != AST.FunctionArgumentsNode:
+            p[0] = AST.FunctionArgumentsNode([p[0]])
+    elif len(p) == 4:
+        p[0] = p[1]
+        p[1].args.append(p[3])
+    else:
+        p[0] = AST.FunctionArgumentsNode()
+
+
+def p_function_definition(p):
+    ''' structure : FUNCTION IDENTIFIER  '(' function_definition_arguments ')' '{' programme '}' '''
+    p[0] = AST.FunctionDefinitionNode(p[2], p[4], [p[7]])
+
+
+def p_function_call_arguments(p):
+    ''' function_call_arguments : expression
+        | function_call_arguments ',' expression
+        | ''' # No function argument
+    if len(p) == 2:
+        p[0] = p[1]
+        if type(p[0]) != AST.FunctionArgumentsNode:
+            p[0] = AST.FunctionArgumentsNode([p[0]])
+    elif len(p) == 4:
+        p[0] = p[1]
+        p[1].args.append(p[3])
+    else:
+        p[0] = AST.FunctionArgumentsNode()
+
+
+def p_function_call(p):
+    ''' expression : IDENTIFIER '(' function_call_arguments ')' '''
+    p[0] = AST.FunctionCallNode(p[1], p[3])
 
 
 def p_expression_op(p):
@@ -82,9 +123,9 @@ def p_error(p):
 
 
 precedence = (
+    ('nonassoc', 'COMPARISON'), # Nonassociative operators
     ('left', 'ADD_OP'),
     ('left', 'MUL_OP'),
-    ('left', 'COMPARISON'),
     ('right', 'UMINUS'),
 )
 
